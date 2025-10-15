@@ -5,16 +5,18 @@
 #include "functions.h"
 #include "socket.h"
 
-void connect() {
-    std::thread(connectToServer, "127.0.0.1", 9999).detach();
+std::string input_main;
+std::string username = "default_user01";
+std::string user_color = "WHITE";
+std::string server_ip = "10.128.238.176";
+int server_port = 9999;
+
+void connect(std::string &ip, int port, std::string &username) {
+    std::thread(connectToServer, std::ref(ip), port, std::ref(username)).detach();
 }
 
 int main() {
     std::cout << "  /$$$$$$  /$$                           /$$ /$$            /$$$$$$                            /$$\n /$$__  $$| $$                          | $$|__/           /$$__  $$                          | $$\n| $$  \\__/| $$$$$$$   /$$$$$$   /$$$$$$ | $$ /$$  /$$$$$$ | $$  \\__/  /$$$$$$   /$$$$$$   /$$$$$$$\n| $$      | $$__  $$ |____  $$ /$$__  $$| $$| $$ /$$__  $$| $$       /$$__  $$ /$$__  $$ /$$__  $$\n| $$      | $$  \\ $$  /$$$$$$$| $$  \\__/| $$| $$| $$$$$$$$| $$      | $$  \\ $$| $$  \\__/| $$  | $$\n| $$    $$| $$  | $$ /$$__  $$| $$      | $$| $$| $$_____/| $$    $$| $$  | $$| $$      | $$  | $$\n|  $$$$$$/| $$  | $$|  $$$$$$$| $$      | $$| $$|  $$$$$$$|  $$$$$$/|  $$$$$$/| $$      |  $$$$$$$\n \\______/ |__/  |__/ \\_______/|__/      |__/|__/ \\_______/ \\______/  \\______/ |__/       \\_______/\n\n";
-    std::string input_main;
-    std::string username = "default_user01";
-    std::string user_color = "WHITE";
-
     while (true) {
         std::cout << "[+] Enter command: ";
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -40,13 +42,13 @@ int main() {
         else if (input_main == "help") {
             std::cout << "Here is a list of available commands:\n";
             std::cout << "'help' - Show all available commands.\n";
-            std::cout << "\033[31mThis text is red.\033[0m\n";
-            std::cout << "'settings' - configure YOUR terminal.\n";
+            std::cout << "'connect' - Connect to server with specified port.";
+            std::cout << "'settings' - configure YOUR terminal.\n";;
             std::cout << "'end'  - End program.\n\n";
 
         }
         else if (input_main == "connect") {
-            connect();
+            connect(server_ip, server_port, username);
             std::string serverInput;
             while (true) {
                 std::cout << "> ";
@@ -78,6 +80,16 @@ int main() {
                     std::cout << "<settings> [+] Enter a new username: ";
                     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY); std::cin >> username; std::cout << "\n"; SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                     std::cout << "Changed username to " << username << "\n\n";
+                }
+                else if (input_settings == "ip") {
+                    std::cout << "<settings> [+] Enter the IP address of your desired server: ";
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY); std::cin >> server_ip; std::cout << "\n"; SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                    std::cout << "Changed server IP address to " << username << "\n\n";
+                }
+                else if (input_settings == "username") {
+                    std::cout << "<settings> [+] Enter the port of your desired server: ";
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY); std::cin >> server_port; std::cout << "\n"; SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                    std::cout << "Changed server port to " << username << "\n\n";
                 }
                 else if (input_settings == "back") {
                     break;
