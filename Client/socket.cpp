@@ -5,9 +5,10 @@
 #pragma comment(lib, "ws2_32")
 #include "socket.h"
 
+SOCKET clientSocket;
 std::atomic<bool> shouldReconnect{false};
 
-void sendData(SOCKET clientSocket, const char* data) {
+void sendData(const char* data) {
     try {
         int sent = send(clientSocket, data, strlen(data), 0);
         if (sent == SOCKET_ERROR) {
@@ -42,7 +43,7 @@ void handleData(SOCKET clientSocket) {
                     continue;
                 }
                 else {
-                    std::cerr << "Error receiving data! " << error << std::endl;
+                    //std::cerr << "Error receiving data! " << error << std::endl;
                     shouldReconnect = true;
                     break;
                 }
@@ -66,7 +67,7 @@ bool connectToServer(const char* ipAddress, int port) {
             continue;
         }
         // Create Socket
-        SOCKET clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (clientSocket == INVALID_SOCKET) {
             std::cerr << "Socket creation failed." << std::endl;
             WSACleanup();
@@ -88,7 +89,7 @@ bool connectToServer(const char* ipAddress, int port) {
         }
         // Connection successful
         std::cout << "[+] Connected to server." << std::endl;
-		sendData(clientSocket, "#clientID#127.0.0.1#charlie");
+		sendData("#clientID#127.0.0.1#charlie");
         shouldReconnect = false;
         std::thread(handleData, clientSocket).detach();
 

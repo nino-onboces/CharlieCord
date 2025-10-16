@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string>
-#include <windows.h>
+#include <thread>
 
 #include "functions.h"
+#include "socket.h"
 
 void connect() {
-
+    std::thread(connectToServer, "127.0.0.1", 9999).detach();
 }
 
 int main() {
@@ -43,6 +44,20 @@ int main() {
             std::cout << "'settings' - configure YOUR terminal.\n";
             std::cout << "'end'  - End program.\n\n";
 
+        }
+        else if (input_main == "connect") {
+            connect();
+            std::string serverInput;
+            while (true) {
+                std::cout << "> ";
+                std::getline(std::cin, serverInput);
+                
+                sendData(serverInput.c_str());
+
+                if (serverInput == "disconnect") {
+                    break;
+                }
+            }
         }
         else if (input_main == "settings") {
             std::cout << "'color' - changes username color.\n";

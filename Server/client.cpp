@@ -78,6 +78,9 @@ void handleClient(SOCKET clientSocket) {
                         std::cout << "New client added: " << client.username << " (" << client.ipAddress << ")" << std::endl;
                     }
                 }
+                if (strBuffer == "disconnect") {
+                    disconnectClient(clientSocket);
+                }
                 std::cout << "[+] From client: " << strBuffer << std::endl;
             }
             if (bytes == 0) {
