@@ -3,6 +3,7 @@
 #include <string>
 
 #include "client.h"
+#include "socket.h"
 
 std::vector<Client> clients;
 
@@ -77,6 +78,9 @@ void handleClient(SOCKET clientSocket) {
                         clients.push_back(client);
                         std::cout << "New client added: " << client.username << " (" << client.ipAddress << ")" << std::endl;
                     }
+                }
+                else {
+                    broadcast(strBuffer);
                 }
                 std::cout << "[+] From client: " << strBuffer << std::endl;
             }

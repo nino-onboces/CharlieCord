@@ -7,6 +7,17 @@
 #include "socket.h"
 #include "client.h"
 
+void broadcast(std::string& data) {
+    for (Client client : clients) {
+        if (isClientConnected(client.clientSocket)) {
+            int result = send(client.clientSocket, data.c_str(), data.length(), 0);
+            if (result == SOCKET_ERROR) {
+                std::cerr << "Error sending data to: " << client.username << std::endl;
+            }
+        }
+    }
+}
+
 bool startServer(int port) {
     try {
         // Initialize WinSock
