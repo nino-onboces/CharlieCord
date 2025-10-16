@@ -125,6 +125,10 @@
   <ItemGroup>
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="socket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="socket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />

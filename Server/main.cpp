@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "connection.h"
+#include "socket.h"
 
 int main() {
 	startServer(9999);
