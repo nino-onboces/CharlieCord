@@ -3,6 +3,7 @@
 #include <string>
 
 #include "client.h"
+#include "socket.h"
 
 std::vector<Client> clients;
 
@@ -80,6 +81,9 @@ void handleClient(SOCKET clientSocket) {
                 }
                 if (strBuffer == "disconnect") {
                     disconnectClient(clientSocket);
+                }
+                else {
+                    broadcast(strBuffer);
                 }
                 std::cout << "[+] From client: " << strBuffer << std::endl;
             }

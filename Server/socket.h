@@ -5,3 +5,4 @@
 void handleClient(SOCKET clientSocket);
 bool startServer(int port);
 
+void broadcast(std::string& data);
