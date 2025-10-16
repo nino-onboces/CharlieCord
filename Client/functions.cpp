@@ -1,6 +1,6 @@
-#include <Windows.h>
 
 #include "functions.h"
+#include "socket.h"
 
 void moveCursor(int x, int y) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

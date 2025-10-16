@@ -8,9 +8,9 @@
 SOCKET clientSocket;
 std::atomic<bool> shouldReconnect{false};
 
-void sendData(const char* data) {
+void sendData(const std::string &data) {
     try {
-        int sent = send(clientSocket, data, strlen(data), 0);
+        int sent = send(clientSocket, data.c_str(), data.length(), 0);
         if (sent == SOCKET_ERROR) {
             std::cerr << "Error sending data! " << WSAGetLastError() << std::endl;
             shouldReconnect = true;
@@ -56,7 +56,7 @@ void handleData(SOCKET clientSocket) {
     }
 }
 
-bool connectToServer(const char* ipAddress, int port) {
+bool connectToServer(const std::string &ipAddress, int port, const std::string &username) {
     while (true) {
         // Initialize WinSock
         WSADATA wsaData;
@@ -78,7 +78,7 @@ bool connectToServer(const char* ipAddress, int port) {
         sockaddr_in addr;
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
-        inet_pton(AF_INET, ipAddress, &addr.sin_addr);
+        inet_pton(AF_INET, ipAddress.c_str(), &addr.sin_addr);
         // Connect to server
         if (connect(clientSocket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR) {
             std::cerr << "Connection failed. Retrying..." << std::endl;
@@ -89,7 +89,7 @@ bool connectToServer(const char* ipAddress, int port) {
         }
         // Connection successful
         std::cout << "[+] Connected to server." << std::endl;
-		sendData("#clientID#127.0.0.1#charlie");
+        sendData("#clientID#" + ipAddress + "#" + username);
         shouldReconnect = false;
         std::thread(handleData, clientSocket).detach();
 
